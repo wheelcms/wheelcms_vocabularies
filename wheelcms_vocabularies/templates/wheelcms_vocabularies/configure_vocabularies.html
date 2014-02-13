@@ -1,0 +1,16 @@
+{% extends "wheelcms_axle/configuration.html" %}
+{% load granules %}
+{% load staticfiles %}
+
+{% block granules %}
+  {{block.super}}
+  {% granule "javascript" %}
+    <script src="{% static "js/config_vocabularies.js" %}"></script>
+  {% endgranule %}
+{% endblock %}
+
+{% block config_form %}
+
+Fart poep knetter
+
+{% endblock %}
