@@ -1,16 +1,67 @@
 {% extends "wheelcms_axle/configuration.html" %}
 {% load granules %}
 {% load staticfiles %}
+{% load i18n %}
+{% load url from future %}
 
 {% block granules %}
   {{block.super}}
   {% granule "javascript" %}
+    <script src="{% static "js/ui-bootstrap-0.10.0.min.js" %}"></script>
+    <script src="{% static "js/ui-bootstrap-tpls-0.10.0.min.js" %}"></script>
+    <script src="{% static "js/admin.js" %}"></script>
+
     <script src="{% static "js/config_vocabularies.js" %}"></script>
   {% endgranule %}
 {% endblock %}
 
 {% block config_form %}
 
-Fart poep knetter
+{# move shared ng-app/init code to higherlevel tpl #}
+<div ng-app="wheelcms-admin" ng-init="init('{% url 'wheel_config' %}');" ng-controller="VocabCtrl">
+<form method="post" action="." class="form-horizontal checksave">
+  {% csrf_token %}
+  <input type="hidden" name="config" value="vocabularies"> {# XXX #}
+
+  <input ng-repeat="delete in deleted" type="hidden" name="deleted" value="<[delete]>">
+
+  <div ng-repeat="vocabulary in vocabularies">
+    <div class="form-group">
+      <label for="vocid" class="col-sm-2 control-label">Identifier</label>
+      <div class="col-sm-8">
+        <input type="text" name="voc.id" ng-model="vocabulary.identifier" class="form-control" id="vocid" placeholder="identifier">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="vocdata" class="col-sm-2 control-label">Data</label>
+      <div class="col-sm-8">
+        <textarea class="form-control" name="voc.data" rows="3" ng-model="vocabulary.data"></textarea>
+      </div>
+    <div class="btn btn-primary" ng-click="removeVocabulary($index)">Remove</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="vocid" class="col-sm-2 control-label">Identifier</label>
+    <div class="col-sm-8">
+      <input type="text" ng-model="newvocabulary.identifier" class="form-control" id="vocid" placeholder="identifier">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="vocdata" class="col-sm-2 control-label">Data</label>
+    <div class="col-sm-8">
+      <textarea class="form-control" rows="3" ng-model="newvocabulary.data"></textarea>
+    </div>
+    <div class="btn btn-primary" ng-click="addVocabulary()">Add</div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <input class="btn btn-primary canleave" type="submit" value="{% trans "form_save" %}">
+
+    </div>
+  </div>
+</form>
+</div>
 
 {% endblock %}
