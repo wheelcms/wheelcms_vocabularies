@@ -1,0 +1,5 @@
+include *.md
+
+recursive-include wheelcms_vocabularies *
+
+global-exclude *.pyc
