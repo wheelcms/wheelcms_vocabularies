@@ -1,16 +1,11 @@
 app.controller('VocabCtrl', function($scope) {
     $scope.newvocabulary = {};
     $scope.deleted = [];
+    $scope.vocabularies = [];
 
-    $scope.vocabularies = [
-        {identifier:"foo.bar",
-         data:"{bla bla bla}"},
-        {identifier:"arg.bar",
-         data:"{bla flop bla}"},
-        {identifier:"frap.flop.pip",
-         data:"{asdfasdf asdfsd sdasdf}"}
-
-    ];
+    $scope.init = function(vocabularies) {
+        $scope.vocabularies = vocabularies;
+    };
 
     $scope.addVocabulary = function() {
         $scope.vocabularies.push($scope.newvocabulary);
@@ -20,6 +15,5 @@ app.controller('VocabCtrl', function($scope) {
     $scope.removeVocabulary = function(id) {
         $scope.deleted.push($scope.vocabularies[id].identifier);
         $scope.vocabularies.splice(id, 1);
-        console.log($scope.deleted);
     };
 });
