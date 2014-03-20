@@ -29,8 +29,6 @@ class ConfigurationHandler(BaseConfigurationHandler):
     form = ConfigurationForm
 
     def view(self, handler, instance):
-        handler.context['tabs'] = handler.construct_tabs(self.id)
-
         ## initialization data
         vocabularies = [dict(identifier=v.key, data=v.raw)
                         for v in Vocabulary.objects.filter(conf=instance)]
@@ -56,7 +54,6 @@ class ConfigurationHandler(BaseConfigurationHandler):
 
             ## include hash, open tab
             return handler.redirect(reverse('wheel_config'), config=self.id, success="Changes saved")
-        handler.context['tabs'] = handler.construct_tabs(self.id)
         return handler.template("wheelcms_vocabularies/configure_vocabularies.html")
 
 configuration_registry.register(ConfigurationHandler)
