@@ -23,6 +23,7 @@ setup(name='wheelcms_vocabularies',
           'setuptools',
           'pytest',
           'coverage',
+          'pyyaml'
       ],
       entry_points={
       },

@@ -15,7 +15,7 @@
 
 {# move shared ng-app/init code to higherlevel tpl #}
 <div ng-app="wheelcms-admin" ng-init="init('{% url 'wheel_config' %}');" ng-controller="AdminCtrl">
-<form method="post" action="." class="form-horizontal checksave" ng-init='init({{vocabularies|safe}})' ng-controller="VocabCtrl">
+<form method="post" action="." class="form-horizontal checksave" ng-init='init({{vocabularies}})' ng-controller="VocabCtrl">
   {% csrf_token %}
   <input type="hidden" name="config" value="vocabularies"> {# XXX passes the current config id #}
 

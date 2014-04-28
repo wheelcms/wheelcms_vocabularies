@@ -7,6 +7,8 @@ from wheelcms_axle.configuration import BaseConfigurationHandler
 from wheelcms_axle.registries.configuration import configuration_registry
 from django.db import models
 from django import forms
+import yaml
+import json
 
 
 class Configuration(models.Model):
@@ -22,6 +24,7 @@ class ConfigurationForm(forms.ModelForm):
         model = Configuration
         exclude = ['main']
 
+
 class ConfigurationHandler(BaseConfigurationHandler):
     id = "vocabularies"
     label = "Vocabularies"
@@ -30,7 +33,9 @@ class ConfigurationHandler(BaseConfigurationHandler):
 
     def view(self, handler, instance):
         ## initialization data
-        vocabularies = [dict(identifier=v.key, data=v.raw)
+        vocabularies = [dict(identifier=v.key,
+                             data=yaml.safe_dump(json.loads(v.raw)
+                             ))
                         for v in Vocabulary.objects.filter(conf=instance)]
         handler.context['vocabularies'] = json.dumps(vocabularies)
         return handler.template("wheelcms_vocabularies/configure_vocabularies.html")
@@ -49,7 +54,7 @@ class ConfigurationHandler(BaseConfigurationHandler):
                     pass
             for i, k in enumerate(handler.request.POST.getlist('voc.id', [])):
                 v, _ = Vocabulary.objects.get_or_create(key=k, conf=instance)
-                v.raw = handler.request.POST.getlist('voc.data')[i]
+                v.raw = json.dumps(yaml.load(handler.request.POST.getlist('voc.data')[i]))
                 v.save()
 
             ## include hash, open tab
